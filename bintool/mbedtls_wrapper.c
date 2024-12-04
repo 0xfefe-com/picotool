@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#if ENABLE_DEBUG_LOG
+#if 1 //ENABLE_DEBUG_LOG
 #define DEBUG_LOG(...) printf(__VA_ARGS__)
 static void dump_buf(const char *title, const unsigned char *buf, size_t len)
 {
@@ -137,6 +137,13 @@ void der_to_raw(signature_t *sig) {
     memcpy(sig->bytes + 32, s, sizeof(s));
 }
 
+int super_random(void *p_rng, unsigned char *output, size_t output_len) {
+    DEBUG_LOG("  . Providing %lu of 'random' bytes\n", output_len);
+    for (size_t idx; idx < output_len; ++idx) {
+        output[idx] = 0x5a;
+    }
+    return 0;
+}
 
 void mb_sign_sha256(const uint8_t *entropy, size_t entropy_size, const message_digest_t *m, const public_t *p, const private_t *d, signature_t *out) {
     int ret = 1;
@@ -188,7 +195,8 @@ void mb_sign_sha256(const uint8_t *entropy, size_t entropy_size, const message_d
     if ((ret = mbedtls_ecdsa_write_signature(&ctx_sign, MBEDTLS_MD_SHA256,
                                              m->bytes, sizeof(m->bytes),
                                              out->der, &out->der_len,
-                                             mbedtls_ctr_drbg_random, &ctr_drbg)) != 0) {
+                                            //  mbedtls_ctr_drbg_random, &ctr_drbg)) != 0) {
+                                             super_random, &ctr_drbg)) != 0) {
         DEBUG_LOG(" failed\n  ! mbedtls_ecdsa_write_signature returned %d\n", ret);
         return;
     }
