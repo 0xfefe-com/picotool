@@ -239,7 +239,7 @@ template <typename T> struct range_map {
                 if (r2.intersects(r)) {
                     // fail(ERROR_FORMAT, "Found overlapping memory ranges 0x%08x->0x%08x and 0x%08x->%08x\n",
                     //      r.from, r.to, r2.from, r2.to);
-                    std::cout << "W! Found overlapping memory ranges";
+                    printf("Found overlapping memory ranges 0x%08x->0x%08x and 0x%08x->%08x\n", r.from, r.to, r2.from, r2.to);
                 }
             }
             m.insert(std::make_pair(r.from, std::make_pair(r.to, t)));
