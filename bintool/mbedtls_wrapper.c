@@ -138,9 +138,14 @@ void der_to_raw(signature_t *sig) {
 }
 
 int super_random(void *p_rng, unsigned char *output, size_t output_len) {
+    char *randstring = getenv("PICO_SIGN_RAND");
+    if (randstring == NULL) {
+        DEBUG_LOG("  ! Missing PICO_SIGN_RAND env var\n");
+        return -1;
+    }
     DEBUG_LOG("  . Providing %lu of 'random' bytes\n", output_len);
     for (size_t idx; idx < output_len; ++idx) {
-        output[idx] = 0x5a;
+        output[idx] = randstring[idx % 21];
     }
     return 0;
 }

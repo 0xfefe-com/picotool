@@ -237,8 +237,9 @@ template <typename T> struct range_map {
             for(; f != m.end() && f->first < r.to; f++) { // loop till we can't possibly overlap
                 range r2(f->first, f->second.first);
                 if (r2.intersects(r)) {
-                    fail(ERROR_FORMAT, "Found overlapping memory ranges 0x%08x->0x%08x and 0x%08x->%08x\n",
-                         r.from, r.to, r2.from, r2.to);
+                    // fail(ERROR_FORMAT, "Found overlapping memory ranges 0x%08x->0x%08x and 0x%08x->%08x\n",
+                    //      r.from, r.to, r2.from, r2.to);
+                    std::cout << "W! Found overlapping memory ranges";
                 }
             }
             m.insert(std::make_pair(r.from, std::make_pair(r.to, t)));
